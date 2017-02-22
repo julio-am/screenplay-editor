@@ -1,4 +1,4 @@
-# ScriptEditor
+# Script Editor
 CS121 Script Editor Project
 
 ## Summary
