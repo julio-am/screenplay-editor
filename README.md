@@ -14,7 +14,8 @@ has been removed.
 * Sam Andow
 
 ## Features
-Currently, nothing is implemented
+This version will let you view the text as basic HTML. It currently has trouble with 
+displaying images that it has saved in its files and is not formatted well.
 
 ## Next Release
 We will have a basic reader and search functions
