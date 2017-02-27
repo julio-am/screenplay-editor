@@ -18,5 +18,6 @@ This version will let you view the text as basic HTML. It currently has trouble 
 displaying images that it has saved in its files and is not formatted well.
 
 ## Next Release
-We will have a basic reader and search functions
+We will improve the basic reader and search functions
+We will integrate it more tightly with the XML
 
