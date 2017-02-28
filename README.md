@@ -1,21 +1,24 @@
-# Script Editor
-CS121 Script Editor Project
+# README
 
-## Summary
-Our web application allows users to cut down Shakespeare plays while maintaining the metadata about the script. 
-This way, directors, actors, and producers can work together to cut the script while understanding how their 
-cuts will change the nature of the play by knowing aspects like how many lines a character has or if a character 
-has been removed. 
+This README would normally document whatever steps are necessary to get the
+application up and running.
 
-## Group Members
-* Julia McCarthy  
-* Julio Medina  
-* Sarah Sedky  
-* Sam Andow
+Things you may want to cover:
 
-## Features
-Currently, nothing is implemented
+* Ruby version
 
-## Next Release
-We will have a basic reader and search functions
+* System dependencies
 
+* Configuration
+
+* Database creation
+
+* Database initialization
+
+* How to run the test suite
+
+* Services (job queues, cache servers, search engines, etc.)
+
+* Deployment instructions
+
+* ...
