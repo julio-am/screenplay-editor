@@ -18,3 +18,11 @@
 "bootstrap/variables"*/
 @import "bootstrap-sprockets";
 @import "bootstrap";
+
+div.container{
+	margin-left: 0;
+}
+
+body {
+  padding-top: 50px;
+}
