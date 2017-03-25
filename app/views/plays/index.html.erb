@@ -1,30 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html xmlns:html="http://www.w3.org/1999/xhtml">
-    <% @body.children.each do |x| %>
-        <% x.children.each do |y| %>
-            <% if y.matches?('head') %>
-                <%= y.inner_text %>
-                <br>
-            <% else %>
-                <% y.children.each do |z|%>
-                    <% if z.matches?('head') || z.matches?('stage') %>
-                        <%= z.inner_text %>
-                        <br>
-                    <% else %>
-                        <% z.children.each do |a| %>
-                        <% if a.matches?('ab') %>
-                            <% a.children.each do |b| %>
-                                <%= b.inner_text %>
-                            <% end %>
-                        <% else %>
-                            <%= a.inner_text %>
-                            <br>
-                        <% end %>
-                        <% end %>
-                    <% end %>
-                <% end %>
-            <% end %>
-        <% end %>
+    <% @array.each do |x| %>
+        <%= x %>
         <br>
     <% end %>
 </html>
