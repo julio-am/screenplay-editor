@@ -1,5 +1,4 @@
 import xml.etree.ElementTree as ET
-#from sys import argv
 
 def stageDir(content, target):
     xmlstr = ET.tostring(content, encoding='utf8', method='text')
@@ -10,7 +9,7 @@ def speaker(content, target):
     target.write("\nSpeaker ")
     target.write(filter(lambda x: x != "\n", xmlstr).replace("  ", ""))
 
-def lines(content, target):
+def getLines(content, target):
     line = ""
     for words in content.findall("./*"):
         if ((words.tag == "{http://www.tei-c.org/ns/1.0}milestone") and (words.get('unit') != "page")):
@@ -29,7 +28,7 @@ def printOneScene(scene, target):
         elif (content.tag == "{http://www.tei-c.org/ns/1.0}speaker"):
             speaker(content, target)
         elif(content.tag == "{http://www.tei-c.org/ns/1.0}ab"):
-            lines(content, target)  
+            getLines(content, target)  
 
 target = open("written.txt", "w")
 target.truncate()
