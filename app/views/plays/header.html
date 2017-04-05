@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:html="http://www.w3.org/1999/xhtml"><head>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Romeo and Juliet</title>
+<meta name="author" content="Folger Shakespeare Library">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=600">
+
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Brand</a>
+    </div>
+    <!--/.navbar-header-->
+ 
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+           <ul class="nav navbar-nav">
+                          <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Navigation<b class="caret"></b></a>
+              <ul class="dropdown-menu multi-column columns-5">
+                <div class="row">
+                  <div class="col-sm-4">
+                    <ul class="multi-column-dropdown">
+                      <li><a href="#">Act 1</a></li>
+                      <li class="divider"></li>
+                      <li><a href="#">Scene 1</a></li>
+                      <li><a href="#">Scene 2</a></li>
+                      <li><a href="#">Scene 3</a></li>
+                      <li><a href="#">Scene 4</a></li>
+                      <li><a href="#">Scene 5</a></li>
+                    </ul>
+                  </div>
+                  <div class="col-sm-4">
+                    <ul class="multi-column-dropdown">  
+                      <li><a href="#">Act 2</a></li>
+                      <li class="divider"></li>
+                      <li><a href="#">Scene 1</a></li>
+                      <li><a href="#">Scene 2</a></li>
+                      <li><a href="#">Scene 3</a></li>
+                      <li><a href="#">Scene 4</a></li>
+                      <li><a href="#">Scene 5</a></li>
+                      <li><a href="#">Scene 6</a></li>
+                    </ul>
+                  </div>
+                  <div class="col-sm-4">
+                    <ul class="multi-column-dropdown">
+                      <li><a href="#">Act 3</a></li>
+                      <li class="divider"></li>
+                      <li><a href="#">Scene 1</a></li>
+                      <li><a href="#">Scene 2</a></li>
+                      <li><a href="#">Scene 3</a></li>
+                      <li><a href="#">Scene 4</a></li>
+                      <li><a href="#">Scene 5</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                    <ul class="multi-column-dropdown">
+                      <li><a href="#">Act 4</a></li>
+                      <li class="divider"></li>
+                      <li><a href="#">Scene 1</a></li>
+                      <li><a href="#">Scene 2</a></li>
+                      <li><a href="#">Scene 3</a></li>
+                      <li><a href="#">Scene 4</a></li>
+                      <li><a href="#">Scene 5</a></li>
+                    </ul>
+                  </div>
+                  <div class="col-sm-4">
+                    <ul class="multi-column-dropdown">
+                      <li><a href="#">Act 5</a></li>
+                      <li class="divider"></li>
+                      <li><a href="#">Scene 1</a></li>
+                      <li><a href="#">Scene 2</a></li>
+                      <li><a href="#">Scene 3</a></li>
+                      <li><a href="#">Scene 4</a></li>
+                      <li><a href="#">Scene 5</a></li>
+                    </ul>
+                  </div>
+              </ul>
+          </li>
+
+                <li class="divider-vertical"></li>
+                <li><a href="#about">Characters</a></li>
+                <li class="divider-vertical"></li>
+                <li><a href="#contact">Edit</a></li>
+                <li class="divider-vertical"></li>
+                    <li class="dropdown">
+                          <li><a href="#">Hide removed text</a></li>
+                          <li><a href="#">Show removed text</a></li>
+                          <li role="separator" class="divider"></li>
+                          <li><a href="#">View original text</a></li>
+            </ul>
+        </ul>
+    </div>
+    <!--/.navbar-collapse-->
+</nav>
+<!--/.navbar-->
+
+
+
+<script type="text/javascript">
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    ev.target.appendChild(document.getElementById(data));
+}
+</script>
+    <!-- FOOTER -->
+</div>
+<div style="clear:both"></div>
+
+
+
+<style type="text/css" media="screen,print">@import "fdt.css";</style>
+
+<script type="text/javascript">
+    var smartCopyYN = true;
+    function smartCopy() {
+      if (smartCopyYN == false) return true;
+      if (navigator.appVersion.indexOf("MSIE")!=-1) {
+        document.getElementById('copyPaste').style.visibility = "hidden";
+      }
+      var html = "";
+      var top = window.pageYOffset || document.documentElement.scrollTop;
+      if (typeof window.getSelection != "undefined") {
+        var sel = window.getSelection();
+        if (sel.rangeCount) {
+          var container = document.createElement("div");
+          for (var i = 0, len = sel.rangeCount; i < len; ++i) {
+            container.appendChild(sel.getRangeAt(i).cloneContents());
+          }
+          html = container.innerHTML;
+        }
+      } else if (typeof document.selection != "undefined") {
+        if (document.selection.type == "Text") {
+          html = document.selection.createRange().htmlText;
+        }
+      }
+      document.getElementById('copyPaste').innerHTML = html;
+      cpObj = document.getElementById('copyPaste');
+      var objs = cpObj.getElementsByTagName('a');
+      for (var i = objs.length-1; i >= 0; i--) { objs[i].parentNode.removeChild(objs[i]); }
+      var objs = cpObj.getElementsByTagName('hr');
+      for (var i = objs.length-1; i >= 0; i--) { objs[i].parentNode.removeChild(objs[i]); }
+      var objs = cpObj.getElementsByTagName('*');
+      for (var i = objs.length-1; i >= 0; i--) { 
+        if (objs[i].className) {
+          var className = objs[i].className;
+          var matchNodes = "ftln,lineNbr,pageHeading,actFooter";
+          if (matchNodes.indexOf(className) != -1) {
+            objs[i].parentNode.removeChild(objs[i]);
+          } else if (className.indexOf('alignment') != -1) {
+            objs[i].parentNode.removeChild(objs[i]);
+          }
+        }
+      }
+      if (window.getSelection) {
+        window.getSelection().removeAllRanges();
+        var range = document.createRange();
+        range.selectNode(document.getElementById('copyPaste'));
+        window.getSelection().addRange(range);
+      } else if (document.selection) {
+        document.selection.empty();
+        var range = document.body.createTextRange();
+        range.moveToElementText(document.getElementById('copyPaste'));
+        range.select();
+      }
+      window.scrollTo(0,top);
+    }
+    </script>
+</head>
+<body oncopy="smartCopy();">
