@@ -29,18 +29,40 @@ def printOneScene(scene, targetFile):
         elif(content.tag == "{http://www.tei-c.org/ns/1.0}ab"):
             getLines(content, targetFile)  
 
+def visitAct(xmlTree, targetFile):
+    acts = tree.findall(".//{http://www.tei-c.org/ns/1.0}div1")
+    baseIndent = "                  "
+    actPattern = baseIndent + '<div class="col-sm-4">\n' + baseIndent+ '  <ul class="multi-column-dropdown">\n'
+
+    for act in acts:
+        targetFile.write(actPattern)
+        targetFile.write(baseIndent+'    <li><a href="#">Act %s</a></li>\n' % act.get('n'))
+        targetFile.write(baseIndent+'    <li class="divider"></li>\n')
+        scenes = act.findall(".//{http://www.tei-c.org/ns/1.0}div2")
+        for scene in scenes:
+            idNumber = act.get('n') + "." + scene.get('n')
+            targetFile.write(baseIndent + '    <li><a href="#'+idNumber+'">Scene %s</a></li>\n' % scene.get('n'))
+        targetFile.write(baseIndent+'  </ul>\n'+baseIndent+'</div>\n')
+        if int(act.get('n')) == 3:
+            targetFile.write(baseIndent+"  </div>")
+
+
 header = open("header.html", "r")
 lines = header.readlines()
 target = open("index.html.erb", "w")
+tree = ET.parse("data.xml").getroot()
 for line in lines:
     target.write(line)
-tree = ET.parse("data.xml").getroot()
+    if '<div class="row">' in line:
+        visitAct(tree, target)
 ET.register_namespace("{http://www.tei-c.org/ns/1.0}", "http://www.tei-c.org/ns/1.0")
 acts = tree.findall(".//{http://www.tei-c.org/ns/1.0}div1")
 for act in acts:
     target.write("\n<h1>\nAct %s\n</h1>" % act.get('n'))
-    for scene in act.findall(".//{http://www.tei-c.org/ns/1.0}div2"):
-        target.write("\n<h2>\nScene %s\n</h2>" % act.get('n'))
+    scenes = act.findall(".//{http://www.tei-c.org/ns/1.0}div2")
+    for scene in scenes:
+        idNumber = act.get('n') + "." + scene.get('n')
+        target.write("\n<h2 id ="+idNumber+">\nScene %s\n</h2>" % scene.get('n'))
         printOneScene(scene, target)
 target.write("</body>\n</html>")
 target.close()
