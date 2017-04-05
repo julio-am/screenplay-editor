@@ -1,20 +1,30 @@
 import xml.etree.ElementTree as ET
 
 def stageDir(content, targetFile):
-    xmlstr = ET.tostring(content, encoding='utf8', method='text')
-    targetFile.write("\n<br>\n<i>%s</i>" % filter(lambda x: x != "\n", xmlstr).replace("  ", ""))
+    xmlstr = filter(lambda x: x != "\n", ET.tostring(content, encoding='utf8', method='text')).replace("  ", "")
+    if xmlstr[0] != ',':
+        targetFile.write("\n<br>\n")
+    targetFile.write("<i>%s</i>" % xmlstr)
 
 def speaker(content, targetFile):
-    xmlstr = ET.tostring(content, encoding='utf8', method='text')
-    targetFile.write("\n<br>\n<b>%s</b> "% filter(lambda x: x != "\n", xmlstr).replace("  ", ""))
+    parents = content.findall("..")
+    for parent in parents:
+        if(parent.tag != "ab"):
+            xmlstr = ET.tostring(content, encoding='utf8', method='text')
+            targetFile.write("\n<br>\n<b>%s</b> "% filter(lambda x: x != "\n", xmlstr).replace("  ", ""))
+            return
 
 def getLines(content, targetFile):
     line = ""
     for words in content.findall("./*"):
-        if ((words.tag == "{http://www.tei-c.org/ns/1.0}milestone") and (words.get('unit') != "page")):
+        if ((words.tag == "{http://www.tei-c.org/ns/1.0}milestone") and (words.get('unit') == "ftln")):
             targetFile.write(filter(lambda x: x != "\n", line).replace("  ", ""))
-            targetFile.write("\n<br>\n%s " % words.get('n'))
+            targetFile.write('\n<br>\n<span class="lineNum">%s</span>' % words.get('n'))
             line = ""
+        elif (words.tag[0:3] == "stg"):
+            stageDir(words, targetFile)
+        elif(words.tag == "{http://www.tei-c.org/ns/1.0}seg"):
+            getLines(words, targetFile)
         elif (words.tag != "{http://www.tei-c.org/ns/1.0}fw"):
             line += ET.tostring(words, encoding='utf8', method='text')
     targetFile.write(filter(lambda x: x != "\n", line).replace("  ", ""))
@@ -64,6 +74,6 @@ for act in acts:
         idNumber = act.get('n') + "." + scene.get('n')
         target.write("\n<h2 id ="+idNumber+">\nScene %s\n</h2>" % scene.get('n'))
         printOneScene(scene, target)
-target.write("</body>\n</html>")
+target.write("</div>\n</body>\n</html>")
 target.close()
 
