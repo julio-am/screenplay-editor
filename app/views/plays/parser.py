@@ -58,7 +58,7 @@ printOneScene
 This will write a single scene as we want it formatted
 It takes in a scene and a targetFile.
 """
-def writeOneScene(scene, targetFile, dict):
+def writeOneScene(scene, targetFile, dictionary):
     curSpeaker = ""
     lines = 0
     for content in scene.iter():
@@ -68,7 +68,10 @@ def writeOneScene(scene, targetFile, dict):
             curSpeaker = speaker(content, targetFile)
         elif(content.tag == "{http://www.tei-c.org/ns/1.0}ab"):
             lines = getLines(content, targetFile)
-            dict[curSpeaker] += lines
+            if curSpeaker not in dictionary:
+                dictionary[curSpeaker] = lines
+            else:
+                dictionary[curSpeaker] += lines
 
 
 """
@@ -123,6 +126,12 @@ target.write("</div>\n</body>\n</html>")
 target.close()
 
 chars = open("characters.html", "w")
-chars.write('<table style = "width:100%')
+chars.write("<DOCTYPE! HTML>\n<html>")
+chars.write('<table style="width:100%">\n')
+for key in dictionary:
+    chars.write('<tr><td>%s</td>\n' % key)
+    chars.write('<td>%d</td></tr>\n' % dictionary[key])
+chars.write("</table>")
+chars.write("")
 
 
