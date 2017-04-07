@@ -29,14 +29,19 @@ def stageDirInLine(content, targetFile):
 def speaker(content, targetFile):
         xmlstr = cleanElemToString(content)
         targetFile.write("\n<br>\n<b>%s</b> "% xmlstr)
+        return xmlstr
 
 def getLines(content, targetFile):
     line = ""
+    numLines = 0
     for words in content.findall("./*"):
         if ((words.tag == "{http://www.tei-c.org/ns/1.0}milestone") and (words.get('unit') == "ftln")):
+            numLines += 1
             printSingleLine(line, targetFile)
             targetFile.write('\n<br>\n<span class="lineNum">%s</span>' % words.get('n'))
             line = ""
+        elif((words.tag == "{http://www.tei-c.org/ns/1.0}q")):
+            getLines(words, targetFile)
         elif (words.tag == "{http://www.tei-c.org/ns/1.0}stage"):
             printSingleLine(line, targetFile)
             line = ""
@@ -46,20 +51,25 @@ def getLines(content, targetFile):
         elif (words.tag != "{http://www.tei-c.org/ns/1.0}fw"):
             line += ET.tostring(words, encoding='utf8', method='text')
     printSingleLine(line, targetFile)
+    return numLines
 
 """
 printOneScene
 This will write a single scene as we want it formatted
 It takes in a scene and a targetFile.
 """
-def writeOneScene(scene, targetFile):
+def writeOneScene(scene, targetFile, dict):
+    curSpeaker = ""
+    lines = 0
     for content in scene.iter():
         if (content.tag == "{http://www.tei-c.org/ns/1.0}stage"):
             outerLvlStageDir(content, targetFile)
         elif (content.tag == "{http://www.tei-c.org/ns/1.0}speaker"):
-            speaker(content, targetFile)
+            curSpeaker = speaker(content, targetFile)
         elif(content.tag == "{http://www.tei-c.org/ns/1.0}ab"):
-            getLines(content, targetFile)  
+            lines = getLines(content, targetFile)
+            dict[curSpeaker] += lines
+
 
 """
 visitAct
@@ -91,6 +101,7 @@ def visitAct(xmlTree, targetFile):
             targetFile.write(secondLvl+"</div>")
 
 
+dictionary = {}
 header = open("header.html", "r")
 lines = header.readlines()
 target = open("index.html.erb", "w")
@@ -107,7 +118,11 @@ for act in acts:
     for scene in scenes:
         idNumber = act.get('n') + "." + scene.get('n')
         target.write("\n<h2 id ="+idNumber+">\nScene %s\n</h2>" % scene.get('n'))
-        writeOneScene(scene, target)
+        writeOneScene(scene, target, dictionary)
 target.write("</div>\n</body>\n</html>")
 target.close()
+
+chars = open("characters.html", "w")
+chars.write('<table style = "width:100%')
+
 
