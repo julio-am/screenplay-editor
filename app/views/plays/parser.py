@@ -10,6 +10,11 @@ def cleanElemToString(content):
 def printSingleLine(line, targetFile):
     targetFile.write(filter(lambda x: x != "\n", line).replace("  ", ""))
 
+"""
+outerLvlStageDir 
+This gets the stage directions in the middle of a line and writes them to our file.
+This takes in content and a targetFile.
+"""
 def outerLvlStageDir(content, targetFile):
     parents = content.findall("..")
     for parent in parents:
@@ -20,17 +25,32 @@ def outerLvlStageDir(content, targetFile):
                 targetFile.write("<i>%s</i>" % xmlstr)
                 return
 
+"""
+stageDirInLine 
+This gets the stage directions in the middle of a line and writes them to our file.
+This takes in content and a targetFile.
+"""
 def stageDirInLine(content, targetFile):
     xmlstr = cleanElemToString(content)
     if xmlstr[0] != ',':
         targetFile.write("\n<br>\n")
         targetFile.write("<i>%s</i>" % xmlstr)
 
+"""
+speaker
+This gets the speaker of a line and write it to our file.
+This takes in content and a targetFile.
+"""
 def speaker(content, targetFile):
         xmlstr = cleanElemToString(content)
         targetFile.write("\n<br>\n<b>%s</b> "% xmlstr)
         return xmlstr
 
+"""
+getLines
+This will get lines and stage directions and call printSingleLine on them.
+It takes in content and a targetfile.
+"""
 def getLines(content, targetFile):
     line = ""
     numLines = 0
@@ -55,8 +75,8 @@ def getLines(content, targetFile):
 
 """
 printOneScene
-This will write a single scene as we want it formatted
-It takes in a scene and a targetFile.
+This will write a single scene as we want it formatted.
+It takes in a scene, a targetFile, and a dictionary.
 """
 def writeOneScene(scene, targetFile, dictionary):
     curSpeaker = ""
@@ -81,7 +101,7 @@ It requires an xmlTree that has acts noted by div1 and scenes noted by div2, lik
 XML versions of the plays. It also requires a file to write to. Hopefully, this is the file
 that we're writing to all along.
 This will go through and find all the acts and scenes based on those assumptions. It will
-write out the proper HTML to make a navbar based on those assumptions
+write out the proper HTML to make a navbar based on those assumptions.
 """
 def visitAct(xmlTree, targetFile):
     acts = tree.findall(".//{http://www.tei-c.org/ns/1.0}div1")
