@@ -58,6 +58,31 @@ body {
 	color: #262626;
 	background-color: #f5f5f5;
 }
+
+.sidebar {
+	padding-top: 100px;
+	display: hidden;
+}
+.sidebar li {
+		list-style-type: none;
+}
+.sidebar li .scene {
+		padding-left: 15px;
+}
+
+.showsidebar {
+	display: block;
+}
+ul.scroll-menu {
+	position: relative;
+	display: inherit!important;
+	height: 200px;
+	overflow-x: hidden;
+	/*overflow-x: auto;
+	-webkit-overflow-scrolling:touch;
+	overflow-scrolling: touch;*/
+
+}
  
 @media (max-width: 767px) {
 	.dropdown-menu.multi-column {
@@ -69,4 +94,8 @@ body {
 .lineNum {
 	padding-right: 10px;
 	font-size: 7pt;
+}
+
+.strikethrough {
+  text-decoration: line-through;
 }
