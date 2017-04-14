@@ -60,11 +60,21 @@ body {
 }
 
 .sidebar {
-	padding-top: 100px;
-	display: hidden;
+	background-color: gainsboro;
+	opacity: 90;
+	margin-top: 120px;
+	padding-top: 10px;
+	padding-bottom: 5px;
+	box-shadow:  8px 8px 9px
+
 }
 .sidebar li {
 		list-style-type: none;
+		/*text-shadow:  2px 2px red*/
+}
+
+.sidebar li a {
+	color: #000000!important;
 }
 .sidebar li .scene {
 		padding-left: 15px;
@@ -76,7 +86,7 @@ body {
 ul.scroll-menu {
 	position: relative;
 	display: inherit!important;
-	height: 200px;
+	height: 300px;
 	overflow-x: hidden;
 	/*overflow-x: auto;
 	-webkit-overflow-scrolling:touch;
@@ -92,7 +102,7 @@ ul.scroll-menu {
 }
 
 .lineNum {
-	padding-right: 10px;
+	padding-right: 50px;
 	font-size: 7pt;
 }
 
