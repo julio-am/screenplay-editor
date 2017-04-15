@@ -16,3 +16,23 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+
+$(function() {
+  $('.one').on('click', function(e){
+    e.preventDefault();
+    $('.one').toggleClass('strikethrough');
+  });
+  $('.two').on('click', function(e){
+    e.preventDefault();
+    $('.two').toggleClass('strikethrough');
+  });
+  $('.three').on('click', function(e){
+    e.preventDefault();
+    $('.three').toggleClass('strikethrough');
+  });
+
+  $('.characters').on('click', function(e) {
+    e.preventDefault();
+    $('.sidebar').toggle();
+  })
+});
