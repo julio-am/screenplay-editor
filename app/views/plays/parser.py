@@ -7,23 +7,25 @@ def cleanElemToString(content):
     string = elemToString(content)
     return filter(lambda x: x != "\n", string).replace("  ", "")
 
+def stageDirElem(content):
+    string = ""
+    for children in content.findall("./*"):
+        if children.tag == "{http://www.tei-c.org/ns/1.0}lb":
+            string += "\n"
+        else:
+            toString = ET.tostring(children, encoding='utf8', method='text')
+            string += filter(lambda x: x != "\n", toString).replace("  ", "")
+    return string
+
 def printSingleLine(line, targetFile):
     targetFile.write(filter(lambda x: x != "\n", line).replace("  ", ""))
 
-def outerLvlStageDir(content, targetFile):
-    parents = content.findall("..")
-    for parent in parents:
-        if(parent.tag != "ab"):
-            xmlstr = cleanElemToString(content)
-            if xmlstr[0] != ',':
-                targetFile.write("\n<br>\n")
-                targetFile.write("<i>%s</i>" % xmlstr)
-                return
-
 def stageDirInLine(content, targetFile):
-    xmlstr = cleanElemToString(content)
+    xmlstr = stageDirElem(content)
     if xmlstr[0] != ',':
         targetFile.write("\n<br>\n")
+        targetFile.write("<i>%s</i>" % xmlstr)
+    else:
         targetFile.write("<i>%s</i>" % xmlstr)
 
 def speaker(content, targetFile):
@@ -34,11 +36,12 @@ def speaker(content, targetFile):
 def getLines(content, targetFile):
     line = ""
     numLines = 0
+    listOfSD = []
     for words in content.findall("./*"):
         if ((words.tag == "{http://www.tei-c.org/ns/1.0}milestone") and (words.get('unit') == "ftln")):
             numLines += 1
             printSingleLine(line, targetFile)
-            targetFile.write('\n<br>\n<span class="lineNum">%s</span>' % words.get('n'))
+            targetFile.write('\n<br>\n<span class="lineNum">%s</span>' % words.get('n')[4:])
             line = ""
         elif((words.tag == "{http://www.tei-c.org/ns/1.0}q")):
             getLines(words, targetFile)
@@ -46,12 +49,13 @@ def getLines(content, targetFile):
             printSingleLine(line, targetFile)
             line = ""
             stageDirInLine(words, targetFile)
+            listOfSD = listOfSD + [words.get('n')]
         elif(words.tag == "{http://www.tei-c.org/ns/1.0}seg"):
             getLines(words, targetFile)
         elif (words.tag != "{http://www.tei-c.org/ns/1.0}fw"):
             line += ET.tostring(words, encoding='utf8', method='text')
     printSingleLine(line, targetFile)
-    return numLines
+    return (numLines, listOfSD)
 
 """
 printOneScene
@@ -61,13 +65,17 @@ It takes in a scene and a targetFile.
 def writeOneScene(scene, targetFile, dictionary):
     curSpeaker = ""
     lines = 0
+    listOfSD = []
     for content in scene.iter():
         if (content.tag == "{http://www.tei-c.org/ns/1.0}stage"):
-            outerLvlStageDir(content, targetFile)
+            if content.get('n') not in listOfSD:
+                stageDirInLine(content, targetFile)
         elif (content.tag == "{http://www.tei-c.org/ns/1.0}speaker"):
             curSpeaker = speaker(content, targetFile)
         elif(content.tag == "{http://www.tei-c.org/ns/1.0}ab"):
-            lines = getLines(content, targetFile)
+            numLinesAndSD = getLines(content, targetFile)
+            lines = numLinesAndSD[0]
+            listOfSD += numLinesAndSD[1]
             if curSpeaker not in dictionary:
                 dictionary[curSpeaker] = lines
             else:
@@ -108,12 +116,11 @@ dictionary = {}
 header = open("header.html", "r")
 lines = header.readlines()
 target = open("index.html.erb", "w")
-tree = ET.parse("data.xml").getroot()
+tree = ET.parse("MND.xml").getroot()
 for line in lines:
     target.write(line)
     if '<div class="row">' in line:
         visitAct(tree, target)
-ET.register_namespace("{http://www.tei-c.org/ns/1.0}", "http://www.tei-c.org/ns/1.0")
 acts = tree.findall(".//{http://www.tei-c.org/ns/1.0}div1")
 for act in acts:
     target.write("\n<h1>\nAct %s\n</h1>" % act.get('n'))
@@ -127,11 +134,11 @@ target.close()
 
 chars = open("characters.html", "w")
 chars.write("<DOCTYPE! HTML>\n<html>")
-chars.write('<table style="width:100%">\n')
+chars.write('<center>\n<table style="width:50%">\n')
+chars.write("<tr><th><b>Character Name</b></th><th><b>Number of Lines</b></th></tr>")
 for key in dictionary:
     chars.write('<tr><td>%s</td>\n' % key)
     chars.write('<td>%d</td></tr>\n' % dictionary[key])
-chars.write("</table>")
-chars.write("")
+chars.write("</table></center>")
 
 
