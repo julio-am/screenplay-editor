@@ -20,7 +20,7 @@ def stageDirElem(content):
     string = ""
     for children in content.findall("./*"):
         if children.tag == "{http://www.tei-c.org/ns/1.0}lb":
-            string += "\n"
+            string += "\n<br>\n"
         else:
             toString = ET.tostring(children, encoding='utf8', method='text')
             string += filter(lambda x: x != "\n", toString).replace("  ", "")
@@ -29,8 +29,14 @@ def stageDirElem(content):
 def printSingleLine(line, targetFile):
     targetFile.write(filter(lambda x: x != "\n", line).replace("  ", ""))
 
+"""
+stageDirInLine 
+This gets the stage directions in the middle of a line and writes them to our file.
+This takes in content, a stage directions XML node,  and a targetFile, the file object with write privileges.
+"""
 def stageDirInLine(content, targetFile):
     xmlstr = stageDirElem(content)
+    targetFile.write("<i>%s</i>" % xmlstr)
 """
 printSingleLine
 This writes a string to file after removing extra spaces and all line breaks
@@ -39,37 +45,6 @@ This takes in line, a string, and targetFile, a file object with write privilege
 def printSingleLine(line, targetFile):
     targetFile.write(filter(lambda x: x != "\n", line).replace("  ", ""))
 
-"""
-outerLvlStageDir 
-This gets the stage directions that are not in the middle of a line and writes them to our file.
-This takes in content, a stage directions XML node, and a targetFile, the file object with write privileges.
-"""
-def outerLvlStageDir(content, targetFile):
-    # Because there is no parent function for elementTree, we had to make our own
-    parents = content.findall("..")
-    for parent in parents:
-        # This checks that the stage direction is not in a line
-        if(parent.tag != "ab"):
-            xmlstr = cleanElemToString(content)            
-            # If the stage direction starts with a comma, we write on the same line as the character name
-            if xmlstr[0] != ',':
-                targetFile.write("\n<br>\n")
-                targetFile.write("<i>%s</i>" % xmlstr)
-                return
-
-"""
-stageDirInLine 
-This gets the stage directions in the middle of a line and writes them to our file.
-This takes in content, a stage directions XML node,  and a targetFile, the file object with write privileges.
-"""
-def stageDirInLine(content, targetFile):
-    xmlstr = cleanElemToString(content)
-    # If the stage direction starts with a comma, we write on the same line as the character name
-    if xmlstr[0] != ',':
-        targetFile.write("\n<br>\n")
-        targetFile.write("<i>%s</i>" % xmlstr)
-    else:
-        targetFile.write("<i>%s</i>" % xmlstr)
 
 """
 speaker
@@ -78,8 +53,13 @@ This takes in content, a speaker node, and a targetFile, a file object with writ
 """
 def speaker(content, targetFile):
         xmlstr = cleanElemToString(content)
-        targetFile.write("\n<br>\n<b>%s</b> "% xmlstr)
+        targetFile.write('\n<br>\n<span class = "character">%s</span> '% xmlstr)
         return xmlstr
+
+def writeFormatting(className):
+    formatting.write("\n$('.%s').on('click', function(e){\n" % className)
+    formatting.write("e.preventDefault();\n")
+    formatting.write("$('.%s').toggleClass('strikethrough');\n});\n" % className)
 
 """
 getLines
@@ -95,14 +75,20 @@ def getLines(content, targetFile):
         if ((words.tag == "{http://www.tei-c.org/ns/1.0}milestone") and (words.get('unit') == "ftln")):
             numLines += 1
             printSingleLine(line, targetFile)
+            if numLines > 0:
+                targetFile.write("</span>")
             targetFile.write('\n<br>\n<span class="lineNum">%s</span>' % words.get('n')[4:])
+            targetFile.write('<span class = "%s">' % words.get('n').replace(".", "-"))
+            writeFormatting(words.get('n').replace(".", "-"))
             line = ""
+            numLines += 1
         # If the child node is a q or seg, those are wrappers, so we need to go one level deeper
-        elif((words.tag == "{http://www.tei-c.org/ns/1.0}q") or (words.tag == "{http://www.tei-c.org/ns/1.0}seg")):
+        elif((words.tag == "{http://www.tei-c.org/ns/1.0}seg")):
             getLines(words, targetFile)
         # If the child is a stage, we should print the line and then print the stage direction
         elif (words.tag == "{http://www.tei-c.org/ns/1.0}stage"):
             printSingleLine(line, targetFile)
+            targetFile.write(" ")
             line = ""
             stageDirInLine(words, targetFile)
             listOfSD = listOfSD + [words.get('n')]
@@ -113,6 +99,8 @@ def getLines(content, targetFile):
             line += ET.tostring(words, encoding='utf8', method='text')
     # Because we never hit a final milestone after reading in the last line, we need to print it out
     printSingleLine(line, targetFile)
+    targetFile.write("</span>")
+    targetFile.write("<br>")
     return (numLines, listOfSD)
 
 """
@@ -145,6 +133,7 @@ def writeOneScene(scene, targetFile, dictionary):
                 dictionary[curSpeaker] += lines
 
 
+
 """
 visitAct
 This is a visitor parser to create a custom navigation bar for any play we use. 
@@ -154,8 +143,8 @@ that we're writing to all along.
 This will go through and find all the acts and scenes based on those assumptions. It will
 write out the proper HTML to make a navbar based on those assumptions.
 """
-def visitAct(xmlTree, targetFile):
-    acts = tree.findall(".//{http://www.tei-c.org/ns/1.0}div1")
+def oldVisitAct(xmlTree, targetFile):
+    acts = xmlTree.findall(".//{http://www.tei-c.org/ns/1.0}div1")
     baseIndent = " " * 14
     secondLvl = baseIndent + "  "
     thirdLvl = secondLvl + "  "
@@ -163,7 +152,8 @@ def visitAct(xmlTree, targetFile):
 
     for act in acts:
         targetFile.write(actPattern)
-        targetFile.write(thirdLvl+'<li><a href="#">Act %s</a></li>\n' % act.get('n'))
+        targetFile.write(thirdLvl+'<li><a href="#%s">Act ' % act.get('n'))
+        targetFile.write('%s</a></li>\n' % act.get('n'))
         targetFile.write(thirdLvl+'<li class="divider"></li>\n')
         scenes = act.findall(".//{http://www.tei-c.org/ns/1.0}div2")
         for scene in scenes:
@@ -175,24 +165,49 @@ def visitAct(xmlTree, targetFile):
         if int(act.get('n')) == 3:
             targetFile.write(secondLvl+"</div>")
             
+
+def visitAct(content, targetFile):
+    indent = " "*4
+    acts = content.findall(".//{http://www.tei-c.org/ns/1.0}div1")
+    for act in acts:
+        targetFile.write(indent)
+        targetFile.write('\n<li><a href="#%s" class="act">Act' % act.get('n'))
+        targetFile.write(' %s</a></li>' % act.get('n'))
+        targetFile.write('\n<li class="divider"></li>')
+        scenes = act.findall(".//{http://www.tei-c.org/ns/1.0}div2")
+        for scene in scenes:
+            idNumber = act.get('n') + "." + scene.get('n')
+            targetFile.write(indent)
+            targetFile.write('\n<li><a href="#%s" class="scene">Scene ' % idNumber)
+            targetFile.write('%s</a></li>' % scene.get('n'))
+
             
 dictionary = {}
 header = open("header.html", "r")
 lines = header.readlines()
 target = open("index.html.erb", "w")
-tree = ET.parse("MND.xml").getroot()
+tree = ET.parse("data.xml").getroot()
+formatting = open("../../assets/javascripts/application.js", "w")
+formatHeader = open("../../assets/javascripts/applicationheader.txt", "r")
 
 # Write the header to index file first, using the visitor parser at the appropriate place
 for line in lines:
     target.write(line)
     if '<div class="row">' in line:
+        oldVisitAct(tree, target)
+    elif '<ul class="scroll-menu scroll-menu-2x">' in line:
         visitAct(tree, target)
+
+jsLines = formatHeader.readlines()
+for line in jsLines:
+    formatting.write(line)
 
 # Start by finding all the acts, noted with div1's
 acts = tree.findall(".//{http://www.tei-c.org/ns/1.0}div1")
 
 for act in acts:
-    target.write("\n<h1>\nAct %s\n</h1>" % act.get('n'))
+    target.write('\n<h1 id = %s>\nAct '% act.get('n'))
+    target.write('%s\n</h1>' % act.get('n'))
     # Find all the scenes in the act. Each has the tag div2
     scenes = act.findall(".//{http://www.tei-c.org/ns/1.0}div2")
     
@@ -204,6 +219,7 @@ for act in acts:
         writeOneScene(scene, target, dictionary)
 target.write("</div>\n</body>\n</html>")
 target.close()
+formatting.write("\n})")
 
 chars = open("characters.html", "w")
 chars.write("<DOCTYPE! HTML>\n<html>")
@@ -217,5 +233,4 @@ for key in dictionary:
     chars.write('<tr><td>%s</td>\n' % key)
     chars.write('<td>%d</td></tr>\n' % dictionary[key])
 chars.write("</table></center>")
-
-
+chars.close()

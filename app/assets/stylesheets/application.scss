@@ -58,6 +58,41 @@ body {
 	color: #262626;
 	background-color: #f5f5f5;
 }
+
+.sidebar {
+	background-color: gainsboro;
+	opacity: 90;
+	margin-top: 120px;
+	padding-top: 10px;
+	padding-bottom: 5px;
+	box-shadow:  8px 8px 9px
+
+}
+.sidebar li {
+		list-style-type: none;
+		/*text-shadow:  2px 2px red*/
+}
+
+.sidebar li a {
+	color: #000000!important;
+}
+.sidebar li .scene {
+		padding-left: 15px;
+}
+
+.showsidebar {
+	display: block;
+}
+ul.scroll-menu {
+	position: relative;
+	display: inherit!important;
+	height: 300px;
+	overflow-x: hidden;
+	/*overflow-x: auto;
+	-webkit-overflow-scrolling:touch;
+	overflow-scrolling: touch;*/
+
+}
  
 @media (max-width: 767px) {
 	.dropdown-menu.multi-column {
@@ -66,7 +101,16 @@ body {
 	}
 }
 
+.character {
+	padding-left: 25px;
+	font-weight: bold;
+}
+
 .lineNum {
-	padding-right: 10px;
+	padding-right: 25px;
 	font-size: 7pt;
+}
+
+.strikethrough {
+  text-decoration: line-through;
 }
