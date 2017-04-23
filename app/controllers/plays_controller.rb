@@ -1,9 +1,7 @@
-require 'nokogiri'
 class PlaysController < ApplicationController
+  def characters
+  end
+
   def index
   end
-
-  def reader
-  end
-
 end
