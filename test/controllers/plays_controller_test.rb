@@ -1,13 +1,13 @@
 require 'test_helper'
 
 class PlaysControllerTest < ActionDispatch::IntegrationTest
-  test "should get index" do
-    get plays_index_url
+  test "should get characters" do
+    get plays_characters_url
     assert_response :success
   end
 
-  test "should get reader" do
-    get plays_reader_url
+  test "should get index" do
+    get plays_index_url
     assert_response :success
   end
 
