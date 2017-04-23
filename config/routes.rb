@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'plays/characters'
+
+  get 'plays/index'
+
   root 'plays#index'
   resources :plays
 

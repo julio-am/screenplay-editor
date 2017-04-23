@@ -191,7 +191,10 @@ formatHeader = open("../../assets/javascripts/applicationheader.txt", "r")
 # Write the header to index file first, using the visitor parser at the appropriate place
 for line in lines:
     target.write(line)
-    if '<div class="row">' in line:
+    if '<a class="navbar-brand" href="#">' in line:
+        title = tree.find(".//{http://www.tei-c.org/ns/1.0}title")
+        target.write(elemToString(title))
+    elif '<div class="row">' in line:
         oldVisitAct(tree, target)
     elif '<ul class="scroll-menu scroll-menu-2x">' in line:
         visitAct(tree, target)
@@ -220,16 +223,17 @@ target.close()
 
 formatting.write("\n})")
 
-chars = open("characters.html", "w")
+chars = open("characters.html.erb", "w")
 chars.write("<DOCTYPE! HTML>\n<html>")
 chars.write('<center>\n<table style="width:50%">\n')
-chars.write("<tr><th><b>Character Name</b></th><th><b>Number of Lines</b></th></tr>")
-chars.write('<table style="width:100%">\n')
+chars.write("<tr><th><b>Character Name</b></th><th><b>Modified Number of Lines</b></th>")
+chars.write("<th><b>Original Number of Lines</b></th></tr>")
 
 # In a table we output the name of the character from the dictionary
 # and the number of lines they spoke
 for key in dictionary:
-    chars.write('<tr><td>%s</td>\n' % key)
-    chars.write('<td>%d</td></tr>\n' % dictionary[key])
+    chars.write('<tr><td>%s</td>' % key)
+    chars.write('<td>%d</td>' % dictionary[key])
+    chars.write('<td>%d</td></tr>' % dictionary[key])
 chars.write("</table></center>")
 chars.close()
