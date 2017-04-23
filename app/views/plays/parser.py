@@ -29,7 +29,6 @@ def stageDirElem(content):
 def printSingleLine(line, targetFile):
     targetFile.write(filter(lambda x: x != "\n", line).replace("  ", ""))
 
-
 """
 stageDirInLine 
 This gets the stage directions in the middle of a line and writes them to our file.
@@ -45,6 +44,7 @@ This takes in line, a string, and targetFile, a file object with write privilege
 """
 def printSingleLine(line, targetFile):
     targetFile.write(filter(lambda x: x != "\n", line).replace("  ", ""))
+
 
 """
 speaker
@@ -73,6 +73,7 @@ def getLines(content, targetFile):
     for words in content.findall("./*"):
         # If the child is a milestone, it prints out the previous line, the next line number, and resets
         if ((words.tag == "{http://www.tei-c.org/ns/1.0}milestone") and (words.get('unit') == "ftln")):
+            numLines += 1
             printSingleLine(line, targetFile)
             if numLines > 0:
                 targetFile.write("</span>")
@@ -164,6 +165,7 @@ def oldVisitAct(xmlTree, targetFile):
         if int(act.get('n')) == 3:
             targetFile.write(secondLvl+"</div>")
             
+
 def visitAct(content, targetFile):
     indent = " "*4
     acts = content.findall(".//{http://www.tei-c.org/ns/1.0}div1")
@@ -220,7 +222,6 @@ for act in acts:
         writeOneScene(scene, target, dictionary)
 target.write("</div>\n</body>\n</html>")
 target.close()
-
 formatting.write("\n})")
 
 chars = open("characters.html.erb", "w")
