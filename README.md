@@ -24,12 +24,13 @@ makes it easy to cut a play, while still making it possible to navigate to certa
 
 ## Usage
 
-* To jump to a section of the play, click on a scene or act on the floating navigation bar on the right. 
-If you don't want the navigation bar, you can click on the Navigation tab.
+* The python parser relies on data.xml, so to view a different play, change the specified play in parser.py to any xml file in the app/assets folder.
+* To import a new play, download the XML from the Folger Digital Library and put it into the app/assets folder.
+* To jump to a section of the play, click on a scene or act on the floating navigation bar on the right. If you don't want the navigation bar, you can click on the Navigation tab.
 * To strike through a line of the play, click on that line. If it does not work, rerun to localhost:3000 and try again.
 * Sometimes the back button makes everything break.
-* The python parser relies on data.xml, so to view a different play, you need to download the xml for the play you would like and add it
-  to the directory.
+
+* To toggle between Edit mode on or off, click the "Edit" button in the top navigation bar. 
 
 
 ## Contributing
