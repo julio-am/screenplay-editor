@@ -18,8 +18,9 @@ makes it easy to cut a play, while still making it possible to navigate to certa
 3. Get the correct Ruby gems `bundle install`
 4. Navigate to the plays folder `cd app/views/plays`
 5. Run the parser `python parser.py`
-6. Set up the server `rails s`
-7. Navigate to localhost:3000 to see the site
+6. Run the migration using rails db:migrate.
+7. Set up the server `rails s`
+8. Navigate to localhost:3000 to see the site
 
 ## Usage
 
@@ -27,6 +28,8 @@ makes it easy to cut a play, while still making it possible to navigate to certa
 If you don't want the navigation bar, you can click on the Navigation tab.
 * To strike through a line of the play, click on that line. If it does not work, rerun to localhost:3000 and try again.
 * Sometimes the back button makes everything break.
+* The python parser relies on data.xml, so to view a different play, you need to download the xml for the play you would like and add it
+  to the directory.
 
 
 ## Contributing
