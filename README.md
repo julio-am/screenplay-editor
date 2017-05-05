@@ -49,6 +49,11 @@ May 5, 2017 Version 0.7 released
 This is an iteration of a project for Harvey Mudd College's CS121 (Software Development) class taught by Professor Yekaterina Kharitonova. 
 This was done by Samantha Andow, Julia McCarthy, Julio Medina, and Sarah Sedky. Project advisor was Professor Ben Wiedermann.
 
+## Future features
+* Add a way to get back to the play from the characters tab, since the back button does not always work.
+* The javascript relies on the formatting of the URL, so make it independent of the URL.
+* Make the edit button meaningful.
+
 ## License
 
 MIT License
